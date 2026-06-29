@@ -1,26 +1,448 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ink: #14171F;
+  --amber: #E8A33D;
+  --ghost-teal: #5EEAD4;
+  --paper: #F2EFE9;
+  --slate: #8B93A7;
+  --error: #E5484D;
+
+  /* Glassmorphism colors */
+  --glass-bg: rgba(20, 23, 31, 0.85);
+  --glass-card-bg: rgba(20, 23, 31, 0.95);
+  --glass-border: rgba(139, 147, 167, 0.15);
+  --glass-card-border: rgba(139, 147, 167, 0.2);
+  --glass-shadow: rgba(0, 0, 0, 0.5);
+
+  /* Retro Boss Battle (PICO-8 Style) colors */
+  --pixel-bg: #1A1C2C;
+  --pixel-accent: #FF6B35;
+  --pixel-hp-green: #38B764;
+  --pixel-hp-red: #D9425D;
+  --pixel-text: #F4F4F4;
+  --pixel-shadow: #29173A;
+  --pixel-panel-bg: rgba(41, 23, 58, 0.8);
+  --pixel-btn-border: #F4F4F4;
+  --pixel-card-bg: #29173A;
+  --pixel-inner-bg: #1A1C2C;
+  --pixel-border: #29173A;
+}
+
+html[data-theme="light"] {
+  --ink: #F4F1E8;
+  --paper: #1B1E27;
+  --slate: #5B6275;
+  --amber: #C97F1E;
+  --ghost-teal: #0D9488;
+  --error: #C9293F;
+
+  /* Glassmorphism light overrides */
+  --glass-bg: rgba(244, 241, 232, 0.85);
+  --glass-card-bg: rgba(244, 241, 232, 0.95);
+  --glass-border: rgba(91, 98, 117, 0.15);
+  --glass-card-border: rgba(91, 98, 117, 0.2);
+  --glass-shadow: rgba(27, 30, 39, 0.15);
+
+  /* PICO-8 light overrides */
+  --pixel-bg: #ECE8DC;
+  --pixel-accent: #E85D1F;
+  --pixel-hp-green: #1F7A43;
+  --pixel-hp-red: #B23252;
+  --pixel-text: #1A1C2C;
+  --pixel-shadow: #29173A;
+  --pixel-panel-bg: rgba(236, 232, 220, 0.85);
+  --pixel-btn-border: #1A1C2C;
+  --pixel-card-bg: #ECE8DC;
+  --pixel-inner-bg: #E0DCCE;
+  --pixel-border: #29173A;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-background: var(--ink);
+  --color-foreground: var(--paper);
+  
+  --color-ink: var(--ink);
+  --color-amber: var(--amber);
+  --color-ghost-teal: var(--ghost-teal);
+  --color-paper: var(--paper);
+  --color-slate-custom: var(--slate);
+  --color-error-custom: var(--error);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Retro Boss Battle color mappings */
+  --color-pixel-bg: var(--pixel-bg);
+  --color-pixel-accent: var(--pixel-accent);
+  --color-pixel-hp-green: var(--pixel-hp-green);
+  --color-pixel-hp-red: var(--pixel-hp-red);
+  --color-pixel-text: var(--pixel-text);
+  --color-pixel-shadow: var(--pixel-shadow);
+  --color-pixel-border: var(--pixel-border);
+  --color-pixel-btn-border: var(--pixel-btn-border);
+  --color-pixel-card-bg: var(--pixel-card-bg);
+  --color-pixel-inner-bg: var(--pixel-inner-bg);
+  --color-pixel-panel-bg: var(--pixel-panel-bg);
+  
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
+  --font-pixel: var(--font-press-start-2p);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  overflow-x: hidden;
 }
+
+/* Custom typing engine animations */
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.animate-blink {
+  animation: blink 1s step-end infinite;
+}
+
+/* Shake animation for typing error */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+
+.animate-shake {
+  animation: shake 0.15s ease-in-out infinite;
+}
+
+/* Split-flap flip animation */
+@keyframes flap-flip {
+  0% {
+    transform: rotateX(0deg);
+  }
+  50% {
+    transform: rotateX(-90deg);
+    background-color: #272c38;
+  }
+  100% {
+    transform: rotateX(0deg);
+  }
+}
+
+.animate-flap-flip {
+  animation: flap-flip 0.18s ease-out;
+  backface-visibility: visible;
+}
+
+/* Retro JRPG Style animations */
+@keyframes pixel-shake {
+  0%, 100% { transform: translate(0, 0); }
+  10%, 30%, 50%, 70%, 90% { transform: translate(-4px, -2px); }
+  20%, 40%, 60%, 80% { transform: translate(4px, 2px); }
+}
+
+.animate-pixel-shake {
+  animation: pixel-shake 0.3s ease-in-out;
+}
+
+@keyframes pixel-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+.animate-pixel-bob {
+  animation: pixel-bob 1.5s ease-in-out infinite;
+}
+
+@keyframes pixel-bounce-fade {
+  0% {
+    transform: translateY(0) scale(0.8);
+    opacity: 0;
+  }
+  20% {
+    transform: translateY(-20px) scale(1.2);
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(-40px) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-55px) scale(0.9);
+    opacity: 0;
+  }
+}
+
+.animate-pixel-bounce-fade {
+  animation: pixel-bounce-fade 0.8s ease-out forwards;
+}
+
+/* Reduced motion query */
+@media (prefers-reduced-motion: reduce) {
+  .animate-flap-flip,
+  .animate-shake,
+  .animate-pulse,
+  .animate-pixel-shake,
+  .animate-pixel-bob,
+  .animate-pixel-bounce-fade {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+  
+  .animate-pixel-bounce-fade {
+    opacity: 1 !important;
+  }
+}
+
+/* Glassmorphism utility classes styled for Departure Board */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+}
+
+.glass-card {
+  background: var(--glass-card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-card-border);
+  box-shadow: 0 10px 40px -10px var(--glass-shadow);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(20, 23, 31, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--slate);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--amber);
+}
+
+/* Light mode overrides for Tailwind hardcoded color classes */
+html[data-theme="light"] .border-\[\#2D3345\] {
+  border-color: rgba(91, 98, 117, 0.2) !important;
+}
+html[data-theme="light"] .border-\[\#2D3345\]\/50 {
+  border-color: rgba(91, 98, 117, 0.12) !important;
+}
+html[data-theme="light"] .border-\[\#2D3345\]\/40 {
+  border-color: rgba(91, 98, 117, 0.1) !important;
+}
+html[data-theme="light"] .border-\[\#2D3345\]\/30 {
+  border-color: rgba(91, 98, 117, 0.08) !important;
+}
+html[data-theme="light"] .bg-\[\#11131A\] {
+  background-color: #E6E2D4 !important;
+}
+html[data-theme="light"] .bg-\[\#11131A\]\/35 {
+  background-color: rgba(230, 226, 212, 0.35) !important;
+}
+html[data-theme="light"] .bg-\[\#1C1F2B\] {
+  background-color: #DCD7C9 !important;
+}
+html[data-theme="light"] .bg-\[\#151821\] {
+  background-color: #ECE8DC !important;
+}
+html[data-theme="light"] .bg-\[\#151821\]\/45 {
+  background-color: rgba(236, 232, 220, 0.45) !important;
+}
+html[data-theme="light"] .bg-\[\#1a1e29\] {
+  background-color: #DCD7C9 !important;
+}
+html[data-theme="light"] .bg-\[\#13161F\] {
+  background-color: #E6E2D4 !important;
+}
+html[data-theme="light"] .bg-\[\#0E1017\] {
+  background-color: #F4F1E8 !important;
+}
+
+/* Light mode adjustments for Survival Mode CRT scanline overlay */
+html[data-theme="light"] .crt-overlay {
+  opacity: 0.08 !important;
+}
+
+/* Light mode adjustments for Boss Battle pixel graphics UI */
+html[data-theme="light"] .font-pixel .theme-toggle-btn {
+  border-width: 4px !important;
+  border-style: solid !important;
+  border-color: var(--pixel-shadow) !important;
+  border-radius: 0px !important;
+}
+
+/* Flash/Glow & Bounce animations for Modifier Slot Reveal */
+@keyframes flash-glow {
+  0% {
+    opacity: 1;
+    filter: brightness(2.5);
+  }
+  100% {
+    opacity: 0;
+    filter: brightness(1);
+  }
+}
+
+.animate-flash-glow {
+  animation: flash-glow 0.4s ease-out forwards;
+}
+
+@keyframes pixel-bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.animate-pixel-bounce {
+  animation: pixel-bounce 0.15s ease-out;
+}
+
+@keyframes pixel-fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.animate-pixel-fade-in {
+  animation: pixel-fade-in 0.25s ease-out forwards;
+}
+
+/* Chapter 3 & 4 Boss Custom Animations */
+
+/* Memory Eater: forgetfulness */
+@keyframes forgetfulness-normal {
+  0%, 25% { opacity: 1; }
+  62.5% { opacity: 0; }
+  80% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes forgetfulness-phase {
+  0%, 12.5% { opacity: 1; }
+  37.5% { opacity: 0; }
+  87.5% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Glitch Beast: screen_distortion */
+@keyframes glitch-distortion-normal {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-2px, 1px); }
+  40% { transform: translate(2px, -1px); }
+  60% { transform: translate(-1px, -2px); }
+  80% { transform: translate(1px, 2px); }
+}
+
+@keyframes glitch-distortion-phase {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-4px, 3px); }
+  40% { transform: translate(5px, -3px); }
+  60% { transform: translate(-3px, -4px); }
+  80% { transform: translate(4px, 4px); }
+}
+
+/* Glitch Beast Ultimate: corrupted_frame */
+@keyframes corrupted-frame-glitch {
+  0%, 100% { opacity: 0; transform: translate(0, 0) scaleY(1); }
+  5% { opacity: 0.15; transform: translate(5px, -2px) scaleY(1.02); filter: hue-rotate(90deg); }
+  10% { opacity: 0.05; transform: translate(-3px, 4px) scaleY(0.98); }
+  15% { opacity: 0; transform: translate(0, 0); }
+  45% { opacity: 0; transform: translate(0, 0); }
+  48% { opacity: 0.2; transform: translate(-8px, -5px) skewX(-15deg); }
+  50% { opacity: 0.1; transform: translate(6px, 3px) skewX(10deg); }
+  52% { opacity: 0; transform: translate(0, 0); }
+  85% { opacity: 0; transform: translate(0, 0); }
+  88% { opacity: 0.15; transform: translate(4px, 2px) scaleY(1.05); }
+  90% { opacity: 0.25; transform: translate(-6px, -2px) skewX(8deg); }
+  92% { opacity: 0; transform: translate(0, 0); }
+}
+
+@keyframes scanline-move {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+.animate-scanline {
+  animation: scanline-move 4s linear infinite;
+}
+
+.animate-corrupted-frame {
+  animation: corrupted-frame-glitch 1.2s steps(1) infinite;
+}
+
+/* Pixel Tyrant Ultimate: cartridge_corruption */
+@keyframes cartridge-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.animate-cartridge-blink {
+  animation: cartridge-blink 0.3s step-end infinite;
+}
+
+/* Reduced motion adjustments for custom distortion */
+@media (prefers-reduced-motion: reduce) {
+  @keyframes glitch-distortion-normal {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-1px, 0.5px); }
+  }
+  @keyframes glitch-distortion-phase {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(1px, -0.5px); }
+  }
+  .animate-corrupted-frame {
+    animation: none !important;
+    opacity: 0.05 !important;
+  }
+  .animate-scanline {
+    animation: scanline-move 12s linear infinite !important;
+  }
+  .animate-float-page-1,
+  .animate-float-page-2,
+  .animate-float-page-3,
+  .animate-float-page-4 {
+    animation: none !important;
+  }
+}
+
+/* Chapter 5 Origin Page Scattering and Floating Animations */
+@keyframes float-page-vertical {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(8deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+@keyframes float-page-horizontal {
+  0% { transform: translateX(0) scale(1); }
+  50% { transform: translateX(8px) scale(1.03); }
+  100% { transform: translateX(0) scale(1); }
+}
+
+.animate-float-page-1 {
+  animation: float-page-vertical 3s ease-in-out infinite;
+}
+
+.animate-float-page-2 {
+  animation: float-page-vertical 4.5s ease-in-out infinite 0.5s;
+}
+
+.animate-float-page-3 {
+  animation: float-page-horizontal 5s ease-in-out infinite;
+}
+
+.animate-float-page-4 {
+  animation: float-page-horizontal 3.5s ease-in-out infinite 1s;
+}
+
